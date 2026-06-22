@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rincian Administrasi Pendaftaran Ulang</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background: linear-gradient(135deg, #1e88e5, #42a5f5);
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+        }
+
+        .container{
+            width:100%;
+            max-width:500px;
+            background:#fff;
+            border-radius:20px;
+            padding:25px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .header{
+            text-align:center;
+            margin-bottom:25px;
+        }
+
+        .header h1{
+            color:#1565c0;
+            font-size:24px;
+            margin-bottom:8px;
+        }
+
+        .header p{
+            color:#666;
+            font-size:14px;
+        }
+
+        .item{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px;
+            margin-bottom:12px;
+            border-radius:12px;
+            background:#f5f9ff;
+            border-left:5px solid #1e88e5;
+        }
+
+        .item span:first-child{
+            font-weight:600;
+            color:#333;
+        }
+
+        .item span:last-child{
+            color:#1565c0;
+            font-weight:bold;
+        }
+
+        .total{
+            margin-top:20px;
+            padding:15px;
+            background:#1565c0;
+            color:#fff;
+            border-radius:12px;
+            display:flex;
+            justify-content:space-between;
+            font-size:18px;
+            font-weight:bold;
+        }
+
+        .note{
+            margin-top:20px;
+            padding:15px;
+            background:#fff8e1;
+            border-left:5px solid #ffc107;
+            border-radius:10px;
+            color:#555;
+            line-height:1.6;
+        }
+
+        .note strong{
+            color:#e65100;
+        }
+
+        /* --- Gaya Baru untuk Tombol Cetak --- */
+        .btn-print {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-print:hover {
+            background: #43a047;
+        }
+
+        /* --- Gaya Khusus Saat Dicetak --- */
+        @media print {
+            body { 
+                background: #fff; 
+                padding: 0; 
+                align-items: flex-start; 
+            }
+            .container { 
+                box-shadow: none; 
+                max-width: 100%; 
+                border-radius: 0; 
+                padding: 0; 
+            }
+            .btn-print { 
+                display: none; /* Menyembunyikan tombol saat dicetak */
+            } 
+            .item { 
+                border-left: 2px solid #333; 
+                background: #fff; 
+                border-bottom: 1px solid #eee; 
+            }
+            .total { 
+                background: #eee; 
+                color: #000; 
+            }
+        }
+
+        @media (max-width:480px){
+            .header h1{
+                font-size:20px;
+            }
+
+            .item{
+                flex-direction:column;
+                align-items:flex-start;
+                gap:5px;
+            }
+
+            .total{
+                font-size:16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Administrasi Pendaftaran Ulang</h1>
+            <p>Calon Siswa Baru - SMA Negeri 8 Kepulauan Aru</p>
+        </div>
+
+        <div id="rincian-biaya"></div>
+
+        <div class="total">
+            <span>Total</span>
+            <span id="total-biaya">Rp 0</span>
+        </div>
+
+        <div class="note">
+            <strong>Note :</strong><br>
+            Administrasi di atas disetor pada bendahara sekolah.
+        </div>
+
+        <button class="btn-print" onclick="window.print()">Cetak Rincian</button>
+    </div>
+
+    <script>
+        // Data ini bisa dengan mudah diganti dari output PHP/Database
+        const dataAdministrasi = [
+            { nama: "Kostum Olahraga", harga: 150000 },
+            { nama: "Baju Batik", harga: 150000 },
+            { nama: "Sampul Laporan Pendidikan", harga: 150000 }
+        ];
+
+        // Fungsi untuk format angka menjadi mata uang Rupiah
+        const formatRupiah = (angka) => {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        };
+
+        const containerRincian = document.getElementById('rincian-biaya');
+        const elementTotal = document.getElementById('total-biaya');
+        let total = 0;
+
+        // Looping data untuk dirender ke dalam HTML
+        dataAdministrasi.forEach(item => {
+            total += item.harga;
+            
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <span>${item.nama}</span>
+                <span>${formatRupiah(item.harga)}</span>
+            `;
+            
+            containerRincian.appendChild(div);
+        });
+
+        // Menampilkan hasil perhitungan total
+        elementTotal.textContent = formatRupiah(total);
+    </script>
+</body>
+</html>
